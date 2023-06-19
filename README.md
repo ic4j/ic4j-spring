@@ -6,20 +6,20 @@
 
 To add Java IC4J React Native Library to your Java project use Maven or Gradle import from Maven Central.
 
-<a href="https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC/jar">
-https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC/jar
+<a href="https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC2/jar">
+https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC2/jar
 </a>
 
 ```
 <dependency>
   <groupId>org.ic4j</groupId>
   <artifactId>ic4j-reactnative</artifactId>
-  <version>0.6.19-RC</version>
+  <version>0.6.19-RC2</version>
 </dependency>
 ```
 
 ```
-implementation 'org.ic4j:ic4j-reactnative:0.6.19-RC'
+implementation 'org.ic4j:ic4j-reactnative:0.6.19-RC2'
 ```
 
 
