@@ -1,0 +1,11 @@
+/.gradle/
+/.gradle/
+/bin/
+/build/
+/build-export.gradle
+/gradle.properties
+/secring.gpg
+/.project
+/.settings/
+/.classpath
+/.DS_Store
