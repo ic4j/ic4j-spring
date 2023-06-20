@@ -19,7 +19,7 @@ implementation("org.ic4j:ic4j-agent:0.6.19.3") {
 implementation 'org.ic4j:ic4j-candid:0.6.19.3'
 implementation 'org.slf4j:slf4j-api:2.0.6'
 
-implementation("org.ic4j:ic4j-reactnative:0.6.19-RC2")
+implementation 'org.ic4j:ic4j-reactnative:0.6.19-RC2'
 ```
 
 To create a React Module that calls an Internet Computer canister, you can extend the ICModule superclass. To define the canister URL and ID, you have two options: either use a Java annotation or specify them in the module constructor.
