@@ -19,12 +19,12 @@ implementation("org.ic4j:ic4j-agent:0.6.19.3") {
 implementation 'org.ic4j:ic4j-candid:0.6.19.3'
 implementation 'org.slf4j:slf4j-api:2.0.6'
 
-implementation 'org.ic4j:ic4j-reactnative:0.6.19-RC2'
+implementation 'org.ic4j:ic4j-reactnative:0.6.19-RC5'
 ```
 
 To create a React Module that calls an Internet Computer canister, you can extend the ICModule superclass. To define the canister URL and ID, you have two options: either use a Java annotation or specify them in the module constructor.
 
-The React method then invokes the 'call' method of the ICModule, passing the React promise, the canister method name, the return type, the method type (a null value defines UPDATE, to use QUERY use new Mode[]{Mode.QUERY}), and the method arguments.
+The React method then invokes the 'update' or 'query' method of the ICModule, passing the React promise, the canister method name, the return type and the method arguments.
 
 ```
 import com.facebook.react.bridge.Promise;
@@ -60,7 +60,7 @@ public class HelloModule extends ICModule {
    
    @ReactMethod
    public void greet(String name, Promise promise) {
-      this.call(promise, "greet", String.class, null, name);
+      this.update(promise, "greet", String.class, name);
    } 
 }      
 
@@ -78,20 +78,20 @@ console.log(`Response is ${response}`);
 
 To add Java IC4J React Native Library to your Java project use Maven or Gradle import from Maven Central.
 
-<a href="https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC2/jar">
-https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC2/jar
+<a href="https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC3/jar">
+https://search.maven.org/artifact/ic4j/ic4j-reactnative/0.6.19-RC3/jar
 </a>
 
 ```
 <dependency>
   <groupId>org.ic4j</groupId>
   <artifactId>ic4j-reactnative</artifactId>
-  <version>0.6.19-RC2</version>
+  <version>0.6.19-RC3</version>
 </dependency>
 ```
 
 ```
-implementation 'org.ic4j:ic4j-reactnative:0.6.19-RC2'
+implementation 'org.ic4j:ic4j-reactnative:0.6.19-RC3'
 ```
 
 

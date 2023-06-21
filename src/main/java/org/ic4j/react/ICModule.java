@@ -235,6 +235,18 @@ public abstract class ICModule extends ReactContextBaseJavaModule {
 		this.serviceProxy = proxyBuilder.getServiceProxy(service);
 
 	}
+	
+	protected <T> void update(Promise promise, String methodName, Class<T> clazz, Object... args) {	
+		this.call(promise, methodName, clazz, null, args);
+	}
+	
+	protected <T> void query(Promise promise, String methodName, Class<T> clazz, Object... args) {	
+		this.call(promise, methodName, clazz, new Mode[]{Mode.QUERY}, args);
+	}	
+	
+	protected <T> void oneway(Promise promise, String methodName,  Object... args) {	
+		this.call(promise, methodName, Void.class, new Mode[]{Mode.ONEWAY}, args);
+	}	
 
 	protected <T> void call(Promise promise, String methodName, Class<T> clazz, Mode[] modes, Object... args) {
 		try {
