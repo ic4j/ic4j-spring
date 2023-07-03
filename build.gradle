@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.ic4j'
-version '0.6.19-RC3'
+version '0.6.19-RC4'
 
 sourceCompatibility = 1.8
 
@@ -47,7 +47,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents.client5', module: 'httpclient5'
     }
     
-	implementation group: 'org.ic4j', name: 'ic4j-candid', version: '0.6.19.3'	
+	implementation group: 'org.ic4j', name: 'ic4j-candid', version: '0.6.19.4'	
 	
 	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.6'	
 	
