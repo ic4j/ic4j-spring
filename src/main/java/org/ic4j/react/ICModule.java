@@ -39,6 +39,7 @@ import org.ic4j.agent.http.ReplicaOkHttpTransport;
 import org.ic4j.agent.identity.AnonymousIdentity;
 import org.ic4j.agent.identity.BasicIdentity;
 import org.ic4j.agent.identity.Identity;
+import org.ic4j.agent.identity.Prime256v1Identity;
 import org.ic4j.agent.identity.Secp256k1Identity;
 import org.ic4j.candid.ObjectSerializer;
 import org.ic4j.candid.parser.IDLArgs;
@@ -164,6 +165,12 @@ public abstract class ICModule extends ReactContextBaseJavaModule {
 
 					identity = Secp256k1Identity.fromPEMFile(path);
 					break;
+				case PRIME256V1:
+					if (identityFile == null)
+						path = Paths.get(fileDirectory.getAbsolutePath(), identityAnnotation.pem_file());
+
+					identity = Prime256v1Identity.fromPEMFile(path);
+					break;					
 				}
 			}
 		}
