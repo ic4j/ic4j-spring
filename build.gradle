@@ -1,11 +1,14 @@
 plugins {
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java' 
+    id 'eclipse'
 }
 
 group 'org.ic4j'
 version '0.7.1'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 17
 
 repositories {
     mavenCentral()
@@ -16,20 +19,20 @@ repositories {
 
 jar {
     manifest {
-        attributes('Implementation-Title': 'ic4j-reactnative',
+        attributes('Implementation-Title': 'ic4j-spring',
                    'Implementation-Version': project.version)
     }
     
-    archiveBaseName = 'ic4j-reactnative'
+    archiveBaseName = 'ic4j-spring'
 }
 
 task fatJar(type: Jar) {
     manifest {
-        attributes('Implementation-Title': 'ic4j-reactnative',
+        attributes('Implementation-Title': 'ic4j-spring',
                    'Implementation-Version': project.version)
     }
     
-    archiveBaseName = 'ic4j-reactnative-with-dependencies'
+    archiveBaseName = 'ic4j-spring-with-dependencies'
     
     from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
@@ -40,16 +43,35 @@ test {
 }
 
 dependencies {
-	compileOnly name: 'android-31'
-	compileOnly name: 'react-android-0.71.11'	
-    
-    implementation("org.ic4j:ic4j-agent:0.7.1") {
-        exclude group: 'org.apache.httpcomponents.client5', module: 'httpclient5'
+    implementation('org.ic4j:ic4j-agent:0.7.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-simple'
     }
-    
-	implementation group: 'org.ic4j', name: 'ic4j-candid', version: '0.7.1'	
+     implementation('org.ic4j:ic4j-candid:0.7.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-simple' 
+    }
+      implementation('org.ic4j:ic4j-java11transport:0.7.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-simple' 
+    }
+    implementation('org.ic4j:ic4j-internetidentity:0.7.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-simple'
+    }
+    implementation('org.ic4j:ic4j-management:0.7.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-simple' 
+    }         
 	
-	implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.13'	
+	// https://mvnrepository.com/artifact/org.springframework/spring-context
+	implementation group: 'org.springframework', name: 'spring-context', version: '6.1.10'
+	
+	implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'ch.qos.logback:logback-classic'
+	
+	//implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.13'
+	
+	//implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
+	
+	// https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api
+	implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '3.0.0'	
 	
 	// https://mvnrepository.com/artifact/commons-io/commons-io
 	implementation group: 'commons-io', name: 'commons-io', version: '2.16.1'
@@ -78,8 +100,11 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
 	
-	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
-	testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.0'	
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.3.1'
+	
+	//testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
+	
 }
 
 
