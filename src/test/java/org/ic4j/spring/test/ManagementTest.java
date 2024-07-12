@@ -1,14 +1,10 @@
 package org.ic4j.spring.test;
 
-import java.io.FileReader;
-import java.io.Reader;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import org.ic4j.agent.identity.BasicIdentity;
 import org.ic4j.agent.identity.Identity;
 import org.ic4j.agent.identity.Secp256k1Identity;
 import org.ic4j.management.CanisterStatusResponse;

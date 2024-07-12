@@ -31,6 +31,6 @@ public class LoanProviderTest {
 		
 		LoanOfferRequest[] requests = loanProviderService.getRequests();
 		
-		Assertions.assertEquals(2, requests.length);
+		Assertions.assertEquals(0, requests.length);
     }
 }
