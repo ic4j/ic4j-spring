@@ -28,4 +28,4 @@ implementation 'org.ic4j:ic4j-spring:0.7.1.1'
 
 # Build
 
-You need JDK 17+ to build IC4J Spring Library .
+You need JDK 8+ to build IC4J Spring Library .
