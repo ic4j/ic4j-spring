@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 @Service
 @Configuration
