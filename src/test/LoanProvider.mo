@@ -1,41 +1,8 @@
-import Principal "mo:base/Principal";
 import Buffer "mo:base/Buffer";
-import Option "mo:base/Option";
 import Time "mo:base/Time";
 
-actor class LoanProvider() = this {
-    // Loan Application
-  public type LoanApplication = {
-    id: Nat;
-    firstname: Text;
-    lastname: Text;
-    zipcode: Text;
-    ssn: Text;
-    amount: Float;
-    term: Nat16;
-    created: Int;
-  };
-
- // Credit Check Request
-  public type CreditRequest = {
-    userid: Principal;   
-    firstname: Text;
-    lastname: Text;
-    zipcode: Text;
-    ssn: Text;
-    created: Int;   
-  };
-
-   // Credit Check
-  public type Credit = {
-    userid: Principal;   
-    rating: Nat16;
-    created: Int;
-  };
-
-   // Loan Offer Request
+persistent actor class LoanProvider(nameInput : Text) = this {
   public type LoanOfferRequest = {
-    userid: Principal;   
     applicationid: Nat;
     amount: Float;
     term: Nat16;   
@@ -46,42 +13,38 @@ actor class LoanProvider() = this {
 
    // Loan Offer
     public type LoanOffer = {
-        providerid: Principal;
-        providername: Text;
-        userid: Principal;   
         applicationid: Nat;
         apr: Float;
         created: Int;
     }; 
 
-    var name : ?Text = null;
+      transient var name : Text = nameInput;
 
-    var requests : Buffer.Buffer<LoanOfferRequest> = Buffer.Buffer(0);
-    var offers : Buffer.Buffer<LoanOffer> = Buffer.Buffer(0);
+      transient var requests : Buffer.Buffer<LoanOfferRequest> = Buffer.Buffer(0);
+      transient var offers : Buffer.Buffer<LoanOffer> = Buffer.Buffer(0);
 
-    public shared (msg) func init(input : Text) {
-        name := Option.make(input);
-        requests := Buffer.Buffer(0);
-        offers := Buffer.Buffer(0);
-    };
-
-    public shared query func getName() : async ?Text{
+      public shared query func getName() : async Text {
         return name;
-    };    
+      };
 
-    public func addRequest(request : LoanOfferRequest){
+      public shared func addRequest(request : LoanOfferRequest) : async () {
         requests.add(request);
     };
 
-    public shared (msg) func addOffer(applicationId : Nat, apr : Float){
+      public shared func addOffer(applicationId : Nat, apr : Float) : async () {
+        offers.add({
+          applicationid = applicationId;
+          apr = apr;
+          created = Time.now();
+        });
     };  
 
-    public shared query (msg) func getRequests() : async [LoanOfferRequest] {
-        return requests.toArray();
+	public shared query (_) func getRequests() : async [LoanOfferRequest] {
+  		return Buffer.toArray(requests);
     }; 
 
-    public shared query (msg) func getOffers() : async [LoanOffer] {
-        return offers.toArray();
+	public shared query (_) func getOffers() : async [LoanOffer] {
+  		return Buffer.toArray(offers);
     };    
 
 };

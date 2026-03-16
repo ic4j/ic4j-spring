@@ -38,6 +38,7 @@ import org.ic4j.agent.http.ReplicaApacheHttpTransport;
 import org.ic4j.agent.identity.Identity;
 import org.ic4j.candid.parser.IDLArgs;
 import org.ic4j.internetidentity.AddTentativeDeviceResponse;
+import org.ic4j.internetidentity.Algorithm;
 import org.ic4j.internetidentity.AnchorCredentials;
 import org.ic4j.internetidentity.Challenge;
 import org.ic4j.internetidentity.ChallengeResult;
@@ -97,7 +98,7 @@ public final class InternetIdentityService {
 		
 	}
 	
-	public KeyPair generateSessionKey(String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+	public KeyPair generateSessionKey(Algorithm algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
 		return org.ic4j.internetidentity.InternetIdentityService.generateSessionKey(algorithm);
 	}	
 	

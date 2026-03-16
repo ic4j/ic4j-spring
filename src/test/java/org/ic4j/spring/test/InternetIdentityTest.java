@@ -4,16 +4,16 @@ import java.nio.file.Paths;
 
 import org.ic4j.agent.identity.BasicIdentity;
 import org.ic4j.internetidentity.DeviceData;
-import org.ic4j.internetidentity.InternetIdentityStats;
 import org.ic4j.spring.InternetIdentityService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class InternetIdentityTest {
 	@Autowired
@@ -30,7 +30,7 @@ public class InternetIdentityTest {
     	DeviceData[] deviceData = internetIdentityService.lookup(10001l);
     	Assertions.assertEquals(3, deviceData.length);	
     	
-    	InternetIdentityStats stats = internetIdentityService.stats();
+		Assertions.assertDoesNotThrow(() -> internetIdentityService.stats());
 
     }
 }

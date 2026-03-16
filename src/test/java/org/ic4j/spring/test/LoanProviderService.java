@@ -24,29 +24,46 @@ public class LoanProviderService extends org.ic4j.spring.Service implements Loan
 
 	@PostConstruct
 	public void init() throws URISyntaxException, IOException {
-		super.init( LoanProvider.class,null, null, null, null);
+		String location = env.getProperty("ic.location");
+		String canisterId = env.getProperty("ic.canister");
+		if (canisterId == null) {
+			String canisterName = env.getProperty("ic.canisterName");
+			if (canisterName != null) {
+				canisterId = IntegrationTestSupport.resolveLocalCanisterId(canisterName).orElse(null);
+			}
+		}
+		String effectiveCanisterId = env.getProperty("ic.effectiveCanister");
+		if (effectiveCanisterId == null) {
+			effectiveCanisterId = canisterId;
+		}
+
+		super.init(LoanProvider.class, location, canisterId, effectiveCanisterId, null);
 	}
 
-    
+	@Override
 	public String getName()
     {
         return super.call("getName");
     }
-    
-	 public LoanOfferRequest[] getRequests() {
+
+	@Override
+	public LoanOfferRequest[] getRequests() {
     	return super.call("getRequests");
     }
-    
-	 public LoanOffer[] getOffers() {
+
+	@Override
+	public LoanOffer[] getOffers() {
 		 return super.call("getOffers");
     }    
 
 	
+	@Override
 	@Async
 	public void addRequest(LoanOfferRequest request) {
 		super.call("addRequest",request);				
 	}
 	
+	@Override
 	@Async
 	public void addOffer(BigInteger applicationId, Double apr) {
 		super.call("getOffers", applicationId, apr );	

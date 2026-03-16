@@ -184,8 +184,6 @@ public abstract class Service {
 
 		this.proxyBuilder = ProxyBuilder.create(agent).effectiveCanisterId(effectiveCanister)
 				.idlFile(this.idlFile).loadIDL(this.loadIDL);
-
-
 	}		
 
 	protected <T> T call( String methodName, Object... args) {

@@ -16,8 +16,8 @@ import org.ic4j.agent.annotations.IdentityType;
 import org.ic4j.candid.types.Type;
 
 @Agent(identity = @Identity(type = IdentityType.BASIC, pem_file = "Ed25519_identity.pem"),fetchRootKey=true, transport = @Transport(url = "http://127.0.0.1:4943/"))
-@Canister("by6od-j4aaa-aaaaa-qaadq-cai")
-@EffectiveCanister("by6od-j4aaa-aaaaa-qaadq-cai")
+@Canister("ielud-liaaa-aaaad-aanuq-cai")
+@EffectiveCanister("ielud-liaaa-aaaad-aanuq-cai")
 public interface LoanProvider
 {
     @QUERY

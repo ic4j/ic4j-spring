@@ -1,0 +1,9 @@
+{
+  "canisters": {
+    "loan_provider_test": {
+      "main": "src/test/LoanProvider.mo",
+      "type": "motoko"
+    }
+  },
+  "version": 1
+}

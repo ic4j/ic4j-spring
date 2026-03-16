@@ -1,17 +1,24 @@
 plugins {
-    //id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java' 
     id 'eclipse'
 }
 
 group 'org.ic4j'
-version '0.7.1.1'
+version '0.8.0'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile).configureEach {
+	if (JavaVersion.current().isJava9Compatible()) {
+		options.release = 8
+	}
+}
 
 
 repositories {
+	mavenLocal()
     mavenCentral()
 }
 
@@ -40,65 +47,128 @@ test {
     useJUnitPlatform()
 }
 
+def isCommandAvailable = { String command ->
+	try {
+		def result = exec {
+			commandLine 'sh', '-c', "command -v ${command} >/dev/null 2>&1"
+			ignoreExitValue = true
+		}
+		return result.exitValue == 0
+	} catch (Exception ignored) {
+		return false
+	}
+}
+
+def isLocalReplicaAvailable = {
+	try {
+		def connection = new URL('http://127.0.0.1:4943/api/v2/status').openConnection()
+		connection.setConnectTimeout(2000)
+		connection.setReadTimeout(2000)
+		connection.connect()
+		return connection.responseCode == 200
+	} catch (Exception ignored) {
+		return false
+	}
+}
+
+tasks.register('deployLoanProviderCanister', Exec) {
+	group = 'verification'
+	description = 'Deploy the local LoanProvider Motoko canister used by integration tests.'
+	workingDir = projectDir
+	def initArgument = '("United Loan")'
+	commandLine 'dfx', 'deploy', 'loan_provider_test', '--network', 'local', '--argument', initArgument
+	onlyIf {
+		file('dfx.json').exists() && isCommandAvailable('dfx') && isLocalReplicaAvailable()
+	}
+}
+
+tasks.register('diagnoseLoanProviderCanisterDeploy') {
+	group = 'verification'
+	description = 'Print diagnostics for local LoanProvider canister deployment problems.'
+
+	doLast {
+		println 'Diagnosing local LoanProvider canister deployment...'
+		println "dfx.json present: ${file('dfx.json').exists()}"
+		println "dfx available: ${isCommandAvailable('dfx')}"
+		println "local replica reachable: ${isLocalReplicaAvailable()}"
+
+		if (!isCommandAvailable('dfx')) {
+			println 'DFX is not installed or not on PATH.'
+			return
+		}
+
+		exec {
+			workingDir projectDir
+			commandLine 'dfx', '--version'
+			ignoreExitValue true
+		}
+
+		exec {
+			workingDir projectDir
+			commandLine 'dfx', 'canister', '--network', 'local', 'id', 'loan_provider_test'
+			ignoreExitValue true
+		}
+
+		exec {
+			workingDir projectDir
+			def initArgument = '("United Loan")'
+			commandLine 'dfx', 'deploy', 'loan_provider_test', '--network', 'local', '--argument', initArgument, '--verbose'
+			ignoreExitValue true
+		}
+	}
+}
+
 dependencies {
-    implementation('org.ic4j:ic4j-agent:0.7.1') {
-        exclude group: 'org.slf4j', module: 'slf4j-simple'
-    }
-     implementation('org.ic4j:ic4j-candid:0.7.1') {
-        exclude group: 'org.slf4j', module: 'slf4j-simple' 
-    }
-      implementation('org.ic4j:ic4j-java11transport:0.7.1') {
-        exclude group: 'org.slf4j', module: 'slf4j-simple' 
-    }
-    implementation('org.ic4j:ic4j-internetidentity:0.7.1') {
-        exclude group: 'org.slf4j', module: 'slf4j-simple'
-    }
-    implementation('org.ic4j:ic4j-management:0.7.1') {
-        exclude group: 'org.slf4j', module: 'slf4j-simple' 
-    }         
+    implementation group: 'org.ic4j', name: 'ic4j-agent', version: '0.8.0'
+	implementation group: 'org.ic4j', name: 'ic4j-candid', version: '0.8.0'
+	implementation group: 'org.ic4j', name: 'ic4j-java11transport', version: '0.7.4'
+	implementation group: 'org.ic4j', name: 'ic4j-internetidentity', version: '0.8.0'
+	implementation group: 'org.ic4j', name: 'ic4j-management', version: '0.8.0'	
 	
 	// https://mvnrepository.com/artifact/org.springframework/spring-core
-	implementation group: 'org.springframework', name: 'spring-core', version: '5.3.29'
+	implementation group: 'org.springframework', name: 'spring-core', version: '5.3.39'
 	
 	// https://mvnrepository.com/artifact/org.springframework/spring-context
-	implementation group: 'org.springframework', name: 'spring-context', version: '5.3.29'
+	implementation group: 'org.springframework', name: 'spring-context', version: '5.3.39'
 	
 	// https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api
 	implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '3.0.0'	
-	
-	// https://mvnrepository.com/artifact/commons-io/commons-io
-	implementation group: 'commons-io', name: 'commons-io', version: '2.16.1'
+
+		// https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+		testImplementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
 	
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
 	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.1'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.21.1'
 	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jdk8
-	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.17.1'
+	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.21.1'
 	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor
-	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.17.1'
-	
+	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.21.1'
+
 	// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
-	implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.78.1'
+	implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.83'
 
 	// https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on
-	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.78.1'
+	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.83'	
 	
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.12.2'
 	
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.12.2'
 	
-	testImplementation 'org.springframework.boot:spring-boot-starter:2.6.4'
-    testImplementation 'org.springframework.boot:spring-boot-starter-logging:2.6.4'
-    testImplementation 'ch.qos.logback:logback-classic'
+	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+	testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.12.2'	
+
+	testImplementation group: 'org.springframework', name: 'spring-test', version: '5.3.39'
+	testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.13'
 	
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.4'	
+	// https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
+	testImplementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.6'	
 }
 
 

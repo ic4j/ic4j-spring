@@ -1,5 +1,8 @@
 /.gradle/
 /.gradle/
+/.dfx/
+/.vscode/
+/scripts/
 /bin/
 /build/
 /build-export.gradle
@@ -9,3 +12,4 @@
 /.settings/
 /.classpath
 /.DS_Store
+DEPLOY.md
