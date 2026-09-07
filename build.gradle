@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'org.ic4j'
-version '0.8.0'
+version '0.8.5'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -119,11 +119,11 @@ tasks.register('diagnoseLoanProviderCanisterDeploy') {
 }
 
 dependencies {
-    implementation group: 'org.ic4j', name: 'ic4j-agent', version: '0.8.0'
-	implementation group: 'org.ic4j', name: 'ic4j-candid', version: '0.8.0'
+    implementation group: 'org.ic4j', name: 'ic4j-agent', version: '0.8.5'
+	implementation group: 'org.ic4j', name: 'ic4j-candid', version: '0.8.5'
 	implementation group: 'org.ic4j', name: 'ic4j-java11transport', version: '0.7.4'
 	implementation group: 'org.ic4j', name: 'ic4j-internetidentity', version: '0.8.0'
-	implementation group: 'org.ic4j', name: 'ic4j-management', version: '0.8.0'	
+	implementation group: 'org.ic4j', name: 'ic4j-management', version: '0.8.5'
 	
 	// https://mvnrepository.com/artifact/org.springframework/spring-core
 	implementation group: 'org.springframework', name: 'spring-core', version: '5.3.39'
@@ -170,6 +170,3 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
 	testImplementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.6'	
 }
-
-
-
