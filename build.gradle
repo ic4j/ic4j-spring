@@ -1,6 +1,7 @@
 plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java' 
+    id 'maven-publish'
     id 'eclipse'
 }
 
@@ -121,8 +122,7 @@ tasks.register('diagnoseLoanProviderCanisterDeploy') {
 dependencies {
     implementation group: 'org.ic4j', name: 'ic4j-agent', version: '0.8.5'
 	implementation group: 'org.ic4j', name: 'ic4j-candid', version: '0.8.5'
-	implementation group: 'org.ic4j', name: 'ic4j-java11transport', version: '0.7.4'
-	implementation group: 'org.ic4j', name: 'ic4j-internetidentity', version: '0.8.0'
+		implementation group: 'org.ic4j', name: 'ic4j-internetidentity', version: '0.8.5'
 	implementation group: 'org.ic4j', name: 'ic4j-management', version: '0.8.5'
 	
 	// https://mvnrepository.com/artifact/org.springframework/spring-core
@@ -138,35 +138,44 @@ dependencies {
 		testImplementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
 	
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.21.0'
 	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.21.1'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.22.4'
 	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jdk8
-	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.21.1'
+	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.22.4'
 	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor
-	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.21.1'
+	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-cbor', version: '2.22.4'
 
 	// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
-	implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.83'
+	implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.86'
 
 	// https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on
-	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.83'	
+	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: '1.86'
 	
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.12.2'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.14.4'
 	
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.12.2'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.14.4'
 	
 	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
-	testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.12.2'	
+	testImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.14.4'
 
 	testImplementation group: 'org.springframework', name: 'spring-test', version: '5.3.39'
 	testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.13'
 	
 	// https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
-	testImplementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.6'	
+	implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.6.5'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'ic4j-spring'
+        }
+    }
 }
